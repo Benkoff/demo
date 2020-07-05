@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.models.Student;
 import com.example.demo.models.requests.StudentRequest;
+import com.example.demo.models.responses.StudentResponse;
 import com.example.demo.services.StudentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,17 +28,18 @@ public class Controller {
     }
 
     @GetMapping(path = "/students/{studentUuid}")
-    public ResponseEntity<Student> getOne(@PathVariable(value = "studentUuid") final UUID studentUuid) {
+    public ResponseEntity<StudentResponse> getOne(@PathVariable(value = "studentUuid") final Long studentUuid) {
         return ResponseEntity.ok(studentService.findOne(studentUuid));
     }
 
-    @GetMapping(path = "/students")
-    public ResponseEntity<Page<Student>> getOne(@PageableDefault(sort = "uuid", direction = Sort.Direction.ASC) final Pageable pageable) {
-        return ResponseEntity.ok(studentService.findAll(pageable));
-    }
+//    @GetMapping(path = "/students")
+//    public ResponseEntity<Page<Student>> getOne(@PageableDefault(sort = "uuid", direction = Sort.Direction.ASC) final Pageable pageable) {
+//        return ResponseEntity.ok(studentService.findAll(pageable));
+//    }
 
     @PostMapping(path = "/students")
-    public ResponseEntity<UUID> addOne(@RequestBody final StudentRequest request) {
+    public ResponseEntity<Long> addOne(@RequestBody final StudentRequest request) {
         return ResponseEntity.ok(studentService.saveOne(request));
     }
+
 }

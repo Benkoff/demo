@@ -1,5 +1,5 @@
 server:
-  port: 8550
+  port: 8080
 
 spring:
   jackson:
@@ -8,28 +8,13 @@ spring:
     deserialization:
       fail-on-unknown-properties: false
     default-property-inclusion: NON_NULL
-
   datasource:
-    url: jdbc:h2:file:/data/demo
+    url: jdbc:h2:~/test
     driverClassName: org.h2.Driver
     username: sa
-    password: password
+    password:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-
-#  datasource:
-#    url: jdbc:mysql://localhost/demo?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-#    username: dev_user
-#    password: T215Awes0m3!
-#  jpa:
-#    database-platform: org.hibernate.dialect.MySQL8Dialect
-#    show-sql: false
-#    properties:
-#      hibernate:
-#        format_sql: true
-#  flyway:
-#    locations: classpath:db/migration
-#    checkLocation: true
-#    out-of-order: true
-#    validate-on-migrate: false
-#    table: schema_version
+  h2:
+    console:
+      enabled: true
