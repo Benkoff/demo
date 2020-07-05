@@ -1,0 +1,35 @@
+server:
+  port: 8550
+
+spring:
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+    default-property-inclusion: NON_NULL
+
+  datasource:
+    url: jdbc:h2:file:/data/demo
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+#  datasource:
+#    url: jdbc:mysql://localhost/demo?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+#    username: dev_user
+#    password: T215Awes0m3!
+#  jpa:
+#    database-platform: org.hibernate.dialect.MySQL8Dialect
+#    show-sql: false
+#    properties:
+#      hibernate:
+#        format_sql: true
+#  flyway:
+#    locations: classpath:db/migration
+#    checkLocation: true
+#    out-of-order: true
+#    validate-on-migrate: false
+#    table: schema_version
