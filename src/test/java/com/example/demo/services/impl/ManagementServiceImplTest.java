@@ -14,18 +14,14 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class ManagementServiceImplTest {
-    private StudyGroupRepository studyGroupRepository;
-    private StudentRepository studentRepository;
     private ManagementService managementService;
 
     private List<Student> students;
@@ -33,8 +29,8 @@ class ManagementServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        this.studyGroupRepository = mock(StudyGroupRepository.class);
-        this.studentRepository = mock(StudentRepository.class);
+        StudyGroupRepository studyGroupRepository = mock(StudyGroupRepository.class);
+        StudentRepository studentRepository = mock(StudentRepository.class);
         this.managementService = new ManagementServiceImpl(studyGroupRepository, studentRepository);
         this.populateTestData();
         when(studentRepository.findAllById(anyList())).thenReturn(students);

@@ -27,7 +27,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentResponse findOne(final Long id) {
-        final Student student = Optional.of(this.studentRepository.getOne(id))
+        final Student student = Optional.ofNullable(this.studentRepository.getOne(id))
                 .orElseThrow(() -> new BadRequestException(STUDENTS_SERVICE, "Student Not Found 404"));
         return this.conversionService.convert(student, StudentResponse.class);
     }
