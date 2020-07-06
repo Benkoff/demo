@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
-
 @RestController
 @RequestMapping(path = "/api/v1")
 public class Controller {
@@ -32,10 +30,10 @@ public class Controller {
         return ResponseEntity.ok(studentService.findOne(studentUuid));
     }
 
-//    @GetMapping(path = "/students")
-//    public ResponseEntity<Page<Student>> getOne(@PageableDefault(sort = "uuid", direction = Sort.Direction.ASC) final Pageable pageable) {
-//        return ResponseEntity.ok(studentService.findAll(pageable));
-//    }
+    @GetMapping(path = "/students")
+    public ResponseEntity<Page<Student>> getOne(@PageableDefault(sort = "id", direction = Sort.Direction.ASC) final Pageable pageable) {
+        return ResponseEntity.ok(studentService.findAll(pageable));
+    }
 
     @PostMapping(path = "/students")
     public ResponseEntity<Long> addOne(@RequestBody final StudentRequest request) {

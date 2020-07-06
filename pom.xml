@@ -17,6 +17,7 @@
 	<properties>
 		<java.version>8</java.version>
 		<sonar-maven.version>3.6.0.1398</sonar-maven.version>
+		<jacoco-maven-plugin-version>0.8.4</jacoco-maven-plugin-version>
 		<validation-api.version>2.0.0.Final</validation-api.version>
 	</properties>
 
@@ -75,6 +76,26 @@
 				<groupId>org.sonarsource.scanner.maven</groupId>
 				<artifactId>sonar-maven-plugin</artifactId>
 				<version>${sonar-maven.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco-maven-plugin-version}</version>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

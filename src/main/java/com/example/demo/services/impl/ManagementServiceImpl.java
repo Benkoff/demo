@@ -6,6 +6,8 @@ import com.example.demo.models.StudyGroup;
 import com.example.demo.repositories.StudentRepository;
 import com.example.demo.repositories.StudyGroupRepository;
 import com.example.demo.services.ManagementService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ import static com.example.demo.constants.Beans.MANAGEMENT_SERVICE_ID;
 
 @Service
 public class ManagementServiceImpl implements ManagementService {
+    private static final Logger log = LoggerFactory.getLogger(ManagementServiceImpl.class);
+
     private final StudyGroupRepository studyGroupRepository;
     private final StudentRepository studentRepository;
 
@@ -37,7 +41,7 @@ public class ManagementServiceImpl implements ManagementService {
                     .filter(studyGroup -> studyGroup.getStudents().size() < studyGroup.getMaxStudents())
                     .filter(studyGroup -> studyGroup.getSubjects().containsAll(student.getSubjects()))
                     .findFirst();
-            selected
+            final StudyGroup group = selected
                     .map(studyGroup -> {
                         student.addStudyGroup(studyGroup);
                         studyGroupsPopulated.add(studyGroup);
@@ -47,9 +51,11 @@ public class ManagementServiceImpl implements ManagementService {
                         unplaced.add(student);
                         return null;
                     });
+            log.debug("Student assigned to Group: {}", group);
         }
         studyGroupsPopulated.stream()
                 .filter(studyGroup -> studyGroup.getMinStudents() > studyGroup.getStudents().size())
+                .peek(studyGroup -> log.debug("Group students minimum has not reached, unplacing students: {}", studyGroup))
                 .forEach(studyGroup -> unplaced.addAll(studyGroup.getStudents()));
         unplaced.forEach(Student::removeStudyGroup);
 

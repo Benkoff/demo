@@ -48,7 +48,7 @@ public class Student extends Person {
 
     private Student(final Builder builder) {
         id = builder.id;
-        setGradeLevel(builder.gradeLevel);
+        this.setGradeLevel(builder.gradeLevel == null ? GradeLevel.LEVEL_NOT_DEFINED : builder.gradeLevel);
         if (builder.studyClass == null) {
             this.removeStudyClass();
         } else {
@@ -64,10 +64,6 @@ public class Student extends Person {
 
     public static Builder newBuilder() {
         return new Builder();
-    }
-
-    public Long getId() {
-        return super.id;
     }
 
     public GradeLevel getGradeLevel() {
