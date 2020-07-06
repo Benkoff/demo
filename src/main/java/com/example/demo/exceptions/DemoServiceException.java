@@ -3,7 +3,7 @@ package com.example.demo.exceptions;
 public class DemoServiceException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-    protected String identifier;
+    protected final String identifier;
 
     public DemoServiceException(final String identifier, final String message) {
         super(message);

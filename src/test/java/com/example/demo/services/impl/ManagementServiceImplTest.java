@@ -1,5 +1,6 @@
 package com.example.demo.services.impl;
 
+import com.example.demo.exceptions.DemoServiceException;
 import com.example.demo.models.Student;
 import com.example.demo.models.StudyGroup;
 import com.example.demo.models.Subject;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
@@ -35,6 +37,8 @@ class ManagementServiceImplTest {
         this.studentRepository = mock(StudentRepository.class);
         this.managementService = new ManagementServiceImpl(studyGroupRepository, studentRepository);
         this.populateTestData();
+        when(studentRepository.findAllById(anyList())).thenReturn(students);
+        when(studyGroupRepository.findAllById(anyList())).thenReturn(groups);
     }
 
     @Test
@@ -45,8 +49,6 @@ class ManagementServiceImplTest {
         final List<Long> studyGroupIds = groups.stream()
                 .map(StudyGroup::getId)
                 .collect(Collectors.toList());
-        when(studentRepository.findAllById(anyList())).thenReturn(students);
-        when(studyGroupRepository.findAllById(anyList())).thenReturn(groups);
 
         final List<Student> unplaced = managementService.populateStudyGroupsWithStudents(studyGroupIds, studentIds);
 
@@ -55,6 +57,38 @@ class ManagementServiceImplTest {
         assertThat(groups.get(1).getStudents()).containsExactlyInAnyOrder(students.get(1), students.get(2));
         assertThat(groups.get(2).getStudents()).containsExactlyInAnyOrder(students.get(4));
         assertThat(groups.get(3).getStudents()).isEmpty();
+    }
+
+    @Test
+    void populateStudyGroupsWithStudents_shouldThrowException_whenGroupsNotFound() {
+        final List<Long> studentIds = students.stream()
+                .map(Student::getId)
+                .collect(Collectors.toList());
+        final List<Long> studyGroupIds = groups.stream()
+                .map(StudyGroup::getId)
+                .collect(Collectors.toList());
+        studyGroupIds.add(100500L);
+
+        DemoServiceException thrown = assertThrows(DemoServiceException.class,
+                () -> managementService.populateStudyGroupsWithStudents(studyGroupIds, studentIds));
+
+        assertThat(thrown).hasMessage("Request contains invalid group id(s)");
+    }
+
+    @Test
+    void populateStudyGroupsWithStudents_shouldThrowException_whenStudentsNotFound() {
+        final List<Long> studentIds = students.stream()
+                .map(Student::getId)
+                .collect(Collectors.toList());
+        final List<Long> studyGroupIds = groups.stream()
+                .map(StudyGroup::getId)
+                .collect(Collectors.toList());
+        studentIds.add(100500L);
+
+        DemoServiceException thrown = assertThrows(DemoServiceException.class,
+                () -> managementService.populateStudyGroupsWithStudents(studyGroupIds, studentIds));
+
+        assertThat(thrown).hasMessage("Request contains invalid student id(s)");
     }
 
     private void populateTestData() {

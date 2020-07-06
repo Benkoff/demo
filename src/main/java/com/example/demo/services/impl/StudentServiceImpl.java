@@ -41,7 +41,7 @@ public class StudentServiceImpl implements StudentService {
     public Long saveOne(final StudentRequest request) {
         final Student student = Optional.ofNullable(conversionService.convert(request, Student.class))
                 .orElseThrow(() -> new BadRequestException(STUDENTS_SERVICE, "Error converting request"));
-        // TODO find & assign StudyClass, StudyGroup and Subjects in repositories, throw Exception if any not found
+        // TODO find & assign StudyClass, StudyGroup and Subjects in repositories, throw Exception if not found
         final Student saved = this.studentRepository.save(student);
         return saved.getId();
     }
