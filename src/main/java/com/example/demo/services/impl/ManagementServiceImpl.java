@@ -9,6 +9,7 @@ import com.example.demo.services.ManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class ManagementServiceImpl implements ManagementService {
         this.studentRepository = studentRepository;
     }
 
+    @Transactional
     @Override
     public List<Student> populateStudyGroupsWithStudents(final List<Long> studyGroupIds, final List<Long> studentIds) {
         final List<StudyGroup> studyGroups = this.retrieveGroups(studyGroupIds);
@@ -59,7 +61,13 @@ public class ManagementServiceImpl implements ManagementService {
                 .forEach(studyGroup -> unplaced.addAll(studyGroup.getStudents()));
         unplaced.forEach(Student::removeStudyGroup);
 
+        this.verifySatisfactoryResult();
+
         return unplaced;
+    }
+
+    private void verifySatisfactoryResult() {
+        // TODO Add some logic to verify result and rollback throwing a runtime exception if it fails
     }
 
     private List<StudyGroup> retrieveGroups(final List<Long> studyGroupIds) {
